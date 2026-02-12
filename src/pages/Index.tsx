@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, Shield, Heart, Star, Sparkles } from "lucide-react";
+import { ArrowRight, Shield, Heart, Star, Sparkles, Play } from "lucide-react";
+import heroVideo from "@/assets/hero-video.mp4";
 import heroImage from "@/assets/hero-camp.jpg";
 import { camps } from "@/data/camps";
 import CampCard from "@/components/CampCard";
@@ -17,10 +18,19 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero */}
+      {/* Hero with Video */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroImage} alt="Summer camp" className="h-full w-full object-cover" />
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster={heroImage}
+            className="h-full w-full object-cover"
+          >
+            <source src={heroVideo} type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-gradient-to-r from-foreground/80 via-foreground/50 to-transparent" />
         </div>
 
@@ -45,7 +55,7 @@ const Index = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 to="/camps"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-secondary px-8 py-4 text-base font-bold text-secondary-foreground shadow-xl shadow-secondary/30 transition-all hover:shadow-2xl hover:-translate-y-1"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-secondary to-sunshine px-8 py-4 text-base font-bold text-secondary-foreground shadow-xl shadow-secondary/30 transition-all hover:shadow-2xl hover:-translate-y-1"
               >
                 Explore Camps <ArrowRight className="h-5 w-5" />
               </Link>
@@ -61,7 +71,7 @@ const Index = () => {
       </section>
 
       {/* Features */}
-      <section className="py-24 summer-gradient">
+      <section className="py-24 bg-gradient-to-br from-primary/10 via-sunshine/10 to-accent/10">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -70,7 +80,7 @@ const Index = () => {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-4">
-              Why Families Choose Us
+              Why Families <span className="text-gradient-summer">Choose Us</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               We create a safe, fun, and enriching environment where every child can thrive.
@@ -85,9 +95,9 @@ const Index = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="glass-card rounded-2xl p-8 text-center hover-lift"
+                className="glass-card rounded-2xl p-8 text-center hover-lift group"
               >
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 group-hover:from-primary/30 group-hover:to-accent/30 transition-all">
                   <f.icon className="h-7 w-7 text-primary" />
                 </div>
                 <h3 className="font-display text-lg font-bold text-foreground mb-2">{f.title}</h3>
@@ -99,7 +109,7 @@ const Index = () => {
       </section>
 
       {/* Featured Camps */}
-      <section className="py-24">
+      <section className="py-24 bg-gradient-to-b from-background via-sunshine/5 to-background">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -109,7 +119,7 @@ const Index = () => {
           >
             <div>
               <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-2">
-                Featured Camps
+                Featured <span className="text-gradient-summer">Camps</span>
               </h2>
               <p className="text-muted-foreground text-lg">Our most popular programs this summer.</p>
             </div>
@@ -121,7 +131,7 @@ const Index = () => {
             </Link>
           </motion.div>
 
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             {featured.map((camp, i) => (
               <CampCard key={camp.id} camp={camp} index={i} />
             ))}
@@ -136,20 +146,23 @@ const Index = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="rounded-3xl bg-gradient-to-r from-primary to-accent p-12 md:p-20 text-center text-primary-foreground shadow-2xl"
+            className="rounded-3xl bg-gradient-to-r from-primary via-accent to-secondary p-12 md:p-20 text-center text-primary-foreground shadow-2xl relative overflow-hidden"
           >
-            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
-              Ready for the Best Summer Ever?
-            </h2>
-            <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
-              Spots are filling fast. Secure your child's place today and give them a summer full of adventure.
-            </p>
-            <Link
-              to="/register"
-              className="inline-flex items-center gap-2 rounded-full bg-background px-10 py-4 text-base font-bold text-foreground shadow-xl transition-all hover:-translate-y-1 hover:shadow-2xl"
-            >
-              Register Now <ArrowRight className="h-5 w-5" />
-            </Link>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent)] pointer-events-none" />
+            <div className="relative">
+              <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
+                Ready for the Best Summer Ever?
+              </h2>
+              <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+                Spots are filling fast. Secure your child's place today and give them a summer full of adventure.
+              </p>
+              <Link
+                to="/register"
+                className="inline-flex items-center gap-2 rounded-full bg-background px-10 py-4 text-base font-bold text-foreground shadow-xl transition-all hover:-translate-y-1 hover:shadow-2xl"
+              >
+                Register Now <ArrowRight className="h-5 w-5" />
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>

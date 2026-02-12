@@ -141,7 +141,7 @@ const Register = () => {
                 <select name="selectedCamp" value={form.selectedCamp} onChange={handleChange} className={inputClass("selectedCamp")}>
                   <option value="">Choose a camp...</option>
                   {camps.map((c) => (
-                    <option key={c.id} value={c.id}>{c.name} — ${c.fees}</option>
+                    <option key={c.id} value={c.id}>{c.name} — ₹{c.fees.toLocaleString("en-IN")}</option>
                   ))}
                 </select>
                 {errors.selectedCamp && <p className="text-xs text-destructive mt-1">{errors.selectedCamp}</p>}
