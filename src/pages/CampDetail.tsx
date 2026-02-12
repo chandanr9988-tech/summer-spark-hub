@@ -1,6 +1,6 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Calendar, Clock, Users, DollarSign, Shield, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Users, IndianRupee, Shield, CheckCircle2 } from "lucide-react";
 import { camps } from "@/data/camps";
 
 const CampDetail = () => {
@@ -58,8 +58,8 @@ const CampDetail = () => {
                   <span className="text-sm"><strong>Duration:</strong> {camp.duration}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <DollarSign className="h-5 w-5 text-sunshine" />
-                  <span className="text-sm"><strong>Fee:</strong> ${camp.fees}</span>
+                  <IndianRupee className="h-5 w-5 text-sunshine" />
+                  <span className="text-sm"><strong>Fee:</strong> ₹{camp.fees.toLocaleString("en-IN")}</span>
                 </div>
               </div>
 
@@ -81,7 +81,7 @@ const CampDetail = () => {
                 to={`/register?camp=${camp.id}`}
                 className="block w-full text-center rounded-full bg-secondary py-4 text-base font-bold text-secondary-foreground shadow-xl shadow-secondary/30 transition-all hover:shadow-2xl hover:-translate-y-0.5"
               >
-                Register Now — ${camp.fees}
+                Register Now — ₹{camp.fees.toLocaleString("en-IN")}
               </Link>
             </div>
           </motion.div>

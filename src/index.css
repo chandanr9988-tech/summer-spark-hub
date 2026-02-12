@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
+    --background: 45 100% 97%;
     --foreground: 220 25% 14%;
 
     --card: 0 0% 100%;
@@ -21,7 +21,7 @@
     --secondary: 28 100% 58%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 30% 95%;
+    --muted: 40 30% 94%;
     --muted-foreground: 220 10% 46%;
 
     --accent: 142 60% 45%;
@@ -30,8 +30,8 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 20% 90%;
-    --input: 210 20% 90%;
+    --border: 40 20% 88%;
+    --input: 40 20% 88%;
     --ring: 199 89% 48%;
 
     --radius: 1rem;
@@ -50,6 +50,8 @@
     --camp-green: 142 60% 45%;
     --camp-orange: 28 100% 58%;
     --camp-sky: 199 89% 48%;
+    --camp-pink: 340 80% 60%;
+    --camp-purple: 270 70% 55%;
   }
 
   .dark {
@@ -116,5 +118,12 @@
 
   .hover-lift {
     @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-xl;
+  }
+
+  .colorful-border {
+    @apply border-2 border-transparent bg-clip-padding;
+    background-image: linear-gradient(white, white), linear-gradient(135deg, hsl(199 89% 48%), hsl(28 100% 58%), hsl(142 60% 45%));
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
   }
 }

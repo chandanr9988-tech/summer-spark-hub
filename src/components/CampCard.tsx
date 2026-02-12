@@ -27,8 +27,8 @@ const CampCard = ({ camp, index = 0 }: CampCardProps) => {
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
               loading="lazy"
             />
-            <div className="absolute top-4 right-4 rounded-full bg-secondary px-3 py-1 text-xs font-bold text-secondary-foreground shadow-lg">
-              ${camp.fees}
+            <div className="absolute top-4 right-4 rounded-full bg-gradient-to-r from-secondary to-sunshine px-3 py-1 text-xs font-bold text-secondary-foreground shadow-lg">
+              ₹{camp.fees.toLocaleString("en-IN")}
             </div>
             {camp.availableSeats <= 10 && (
               <div className="absolute top-4 left-4 rounded-full bg-destructive px-3 py-1 text-xs font-bold text-destructive-foreground">

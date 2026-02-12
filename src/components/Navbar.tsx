@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Sun } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Menu, X, Sun, LogIn, LogOut, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/hooks/useAuth";
 
 const navLinks = [
   { label: "Home", to: "/" },
@@ -12,6 +13,13 @@ const navLinks = [
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass">
@@ -30,20 +38,33 @@ const Navbar = () => {
               key={link.to}
               to={link.to}
               className={`text-sm font-semibold transition-colors duration-200 hover:text-primary ${
-                location.pathname === link.to
-                  ? "text-primary"
-                  : "text-muted-foreground"
+                location.pathname === link.to ? "text-primary" : "text-muted-foreground"
               }`}
             >
               {link.label}
             </Link>
           ))}
-          <Link
-            to="/register"
-            className="rounded-full bg-secondary px-6 py-2.5 text-sm font-bold text-secondary-foreground shadow-lg shadow-secondary/30 transition-all hover:shadow-xl hover:shadow-secondary/40 hover:-translate-y-0.5"
-          >
-            Enroll Now
-          </Link>
+          {user ? (
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-muted-foreground flex items-center gap-1">
+                <User className="h-3.5 w-3.5" />
+                {user.email?.split("@")[0]}
+              </span>
+              <button
+                onClick={handleSignOut}
+                className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <LogOut className="h-3.5 w-3.5" /> Sign Out
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/auth"
+              className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-primary to-accent px-6 py-2.5 text-sm font-bold text-primary-foreground shadow-lg transition-all hover:shadow-xl hover:-translate-y-0.5"
+            >
+              <LogIn className="h-4 w-4" /> Sign In
+            </Link>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -72,21 +93,28 @@ const Navbar = () => {
                   to={link.to}
                   onClick={() => setOpen(false)}
                   className={`text-base font-semibold ${
-                    location.pathname === link.to
-                      ? "text-primary"
-                      : "text-muted-foreground"
+                    location.pathname === link.to ? "text-primary" : "text-muted-foreground"
                   }`}
                 >
                   {link.label}
                 </Link>
               ))}
-              <Link
-                to="/register"
-                onClick={() => setOpen(false)}
-                className="mt-2 rounded-full bg-secondary px-6 py-3 text-center text-sm font-bold text-secondary-foreground shadow-lg"
-              >
-                Enroll Now
-              </Link>
+              {user ? (
+                <button
+                  onClick={() => { handleSignOut(); setOpen(false); }}
+                  className="mt-2 rounded-full border border-border px-6 py-3 text-center text-sm font-bold text-muted-foreground"
+                >
+                  Sign Out
+                </button>
+              ) : (
+                <Link
+                  to="/auth"
+                  onClick={() => setOpen(false)}
+                  className="mt-2 rounded-full bg-gradient-to-r from-primary to-accent px-6 py-3 text-center text-sm font-bold text-primary-foreground shadow-lg"
+                >
+                  Sign In
+                </Link>
+              )}
             </div>
           </motion.div>
         )}
