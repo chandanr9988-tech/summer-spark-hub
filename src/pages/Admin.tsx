@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShieldCheck, Users, ClipboardList, Loader2 } from "lucide-react";
+import { ShieldCheck, Users, ClipboardList, Loader2, CheckCircle, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -26,6 +27,8 @@ const Admin = () => {
   const { isAdmin, loading: adminLoading } = useAdmin();
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [fetching, setFetching] = useState(true);
+  const [updating, setUpdating] = useState<string | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -47,6 +50,24 @@ const Admin = () => {
     };
     fetchRegistrations();
   }, [isAdmin]);
+
+  const togglePaymentStatus = async (id: string, currentStatus: string) => {
+    const newStatus = currentStatus === "confirmed" ? "pending" : "confirmed";
+    setUpdating(id);
+    const { error } = await supabase
+      .from("registrations")
+      .update({ payment_status: newStatus })
+      .eq("id", id);
+    if (error) {
+      toast({ title: "Error", description: "Failed to update status", variant: "destructive" });
+    } else {
+      setRegistrations((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, payment_status: newStatus } : r))
+      );
+      toast({ title: "Updated", description: `Payment marked as ${newStatus}` });
+    }
+    setUpdating(null);
+  };
 
   if (authLoading || adminLoading) {
     return (
@@ -129,15 +150,24 @@ const Admin = () => {
                       <td className="py-3 pr-4">{r.parent_name}</td>
                       <td className="py-3 pr-4 text-muted-foreground">{r.parent_email}</td>
                       <td className="py-3 pr-4">
-                        <span
-                          className={`inline-block rounded-full px-3 py-1 text-xs font-bold ${
+                        <button
+                          onClick={() => togglePaymentStatus(r.id, r.payment_status)}
+                          disabled={updating === r.id}
+                          className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold transition-colors cursor-pointer ${
                             r.payment_status === "confirmed"
-                              ? "bg-accent/10 text-accent"
-                              : "bg-secondary/10 text-secondary"
+                              ? "bg-accent/10 text-accent hover:bg-accent/20"
+                              : "bg-secondary/10 text-secondary hover:bg-secondary/20"
                           }`}
                         >
+                          {updating === r.id ? (
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                          ) : r.payment_status === "confirmed" ? (
+                            <CheckCircle className="h-3 w-3" />
+                          ) : (
+                            <Clock className="h-3 w-3" />
+                          )}
                           {r.payment_status}
-                        </span>
+                        </button>
                       </td>
                       <td className="py-3 text-muted-foreground">
                         {new Date(r.created_at).toLocaleDateString("en-IN")}
