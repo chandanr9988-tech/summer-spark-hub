@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Sun, LogIn, LogOut, User } from "lucide-react";
+import { Menu, X, Sun, LogIn, LogOut, User, ShieldCheck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
+import { useAdmin } from "@/hooks/useAdmin";
 
 const navLinks = [
   { label: "Home", to: "/" },
@@ -15,6 +16,7 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { isAdmin } = useAdmin();
 
   const handleSignOut = async () => {
     await signOut();
@@ -46,6 +48,14 @@ const Navbar = () => {
           ))}
           {user ? (
             <div className="flex items-center gap-3">
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+                >
+                  <ShieldCheck className="h-4 w-4" /> Admin
+                </Link>
+              )}
               <span className="text-xs text-muted-foreground flex items-center gap-1">
                 <User className="h-3.5 w-3.5" />
                 {user.email?.split("@")[0]}
@@ -100,12 +110,23 @@ const Navbar = () => {
                 </Link>
               ))}
               {user ? (
-                <button
-                  onClick={() => { handleSignOut(); setOpen(false); }}
-                  className="mt-2 rounded-full border border-border px-6 py-3 text-center text-sm font-bold text-muted-foreground"
-                >
-                  Sign Out
-                </button>
+                <>
+                  {isAdmin && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setOpen(false)}
+                      className="inline-flex items-center gap-2 text-base font-semibold text-primary"
+                    >
+                      <ShieldCheck className="h-4 w-4" /> Admin Dashboard
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => { handleSignOut(); setOpen(false); }}
+                    className="mt-2 rounded-full border border-border px-6 py-3 text-center text-sm font-bold text-muted-foreground"
+                  >
+                    Sign Out
+                  </button>
+                </>
               ) : (
                 <Link
                   to="/auth"
